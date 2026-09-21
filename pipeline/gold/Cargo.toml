@@ -1,0 +1,17 @@
+[package]
+name = "gold"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Gold layer: business-ready aggregates, integrity checks, and drift detection"
+
+[[bin]]
+name = "gold"
+path = "src/main.rs"
+
+[dependencies]
+common = { path = "../common" }
+anyhow = { workspace = true }
+clap = { workspace = true }
+polars = { workspace = true }

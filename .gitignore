@@ -1,0 +1,15 @@
+/pipeline/target/
+**/target/
+
+# Generated pipeline outputs — regenerate with `make pipeline-demo` or the
+# commands in pipeline/README.md. The raw CSV and its committed schema/drift
+# baselines in data/raw/ are the only data files tracked.
+/data/bronze/*
+/data/silver/*
+/data/gold/*
+!/data/bronze/.gitkeep
+!/data/silver/.gitkeep
+!/data/gold/.gitkeep
+
+__pycache__/
+*.pyc

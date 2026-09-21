@@ -1,0 +1,51 @@
+{
+  "delimiter": ",",
+  "has_header": true,
+  "columns": [
+    {
+      "name": "order_id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "customer_email",
+      "type": "text",
+      "nullable": false
+    },
+    {
+      "name": "region",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "category",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "unit_price",
+      "type": "float",
+      "nullable": true
+    },
+    {
+      "name": "quantity",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "order_date",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "nullable": false
+    },
+    {
+      "name": "notes",
+      "type": "text",
+      "nullable": true
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+[package]
+name = "silver"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Silver layer: clean and declaratively transform bronze data"
+
+[[bin]]
+name = "silver"
+path = "src/main.rs"
+
+[dependencies]
+common = { path = "../common" }
+anyhow = { workspace = true }
+clap = { workspace = true }
+polars = { workspace = true }
+serde = { workspace = true }
+serde_yaml = { workspace = true }

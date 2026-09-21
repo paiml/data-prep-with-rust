@@ -1,0 +1,17 @@
+[package]
+name = "bronze"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Bronze layer: ingest raw CSV as-is into typed, columnar Parquet"
+
+[[bin]]
+name = "bronze"
+path = "src/main.rs"
+
+[dependencies]
+common = { path = "../common" }
+anyhow = { workspace = true }
+clap = { workspace = true }
+polars = { workspace = true }

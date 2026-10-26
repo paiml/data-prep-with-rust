@@ -1,0 +1,35 @@
+name: canary
+
+# Weekly check that the course builds and tests on current toolchains,
+# on both Linux and macOS.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  canary:
+    name: canary (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    env:
+      RUSTUP_TOOLCHAIN: stable
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: pipeline
+      - name: Build and test
+        run: make rust
+      - name: Pipeline demo
+        run: make pipeline-demo

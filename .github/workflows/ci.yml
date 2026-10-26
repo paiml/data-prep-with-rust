@@ -1,0 +1,59 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Markdown lint (no tabs)
+        run: make lint
+
+  rust:
+    name: rust
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.99.1
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: pipeline
+          shared-key: rust
+      - name: Format, clippy, test
+        run: make rust
+      - name: Pipeline demo (bronze -> silver -> gold)
+        run: make pipeline-demo
+
+  gate:
+    name: gate
+    needs: [lint, rust]
+    runs-on: ubuntu-24.04
+    if: always()
+    steps:
+      - name: Verify all jobs succeeded
+        run: |
+          if [ "${{ needs.lint.result }}" != "success" ] || [ "${{ needs.rust.result }}" != "success" ]; then
+            echo "::error::lint=${{ needs.lint.result }} rust=${{ needs.rust.result }}"
+            exit 1
+          fi
+          echo "all gates passed"

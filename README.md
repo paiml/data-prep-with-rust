@@ -105,7 +105,10 @@ Each layer has one guarantee (see [`outline.md`](outline.md) lesson 3.1.2):
 
 Every stage prints a `DataQualityReport` (rows in/out, duplicates dropped,
 columns dropped, nulls remaining) so a run can be audited without
-re-reading the data. ### Setup
+re-reading the data.
+
+### Setup
+
 
 Install the Rust toolchain used by CI (1.99.1, with `rustfmt` and `clippy`).
 `make` is also required.
@@ -121,7 +124,7 @@ rustup toolchain install 1.99.1 --component rustfmt --component clippy
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-rustup toolchain install stable --component rustfmt --component clippy
+rustup toolchain install 1.99.1 --component rustfmt --component clippy
 ```
 
 Build, lint, and test the whole workspace:
@@ -129,7 +132,7 @@ Build, lint, and test the whole workspace:
 ```bash
 make rust            # fmt --check + clippy -D warnings + cargo test
 make pipeline-demo    # bronze -> silver -> gold against the bundled sample data
-make check            # full gate: lint + rust + validate
+make check            # lint + rust (the checks CI runs); validate is local only
 ```
 
 `make rust` is a thin wrapper over the standard toolchain, so you can also

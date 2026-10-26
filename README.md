@@ -2,6 +2,8 @@
 
 **From Messy Data to Production-Ready Datasets using agentic tooling**
 
+[![ci](https://github.com/paiml/data-prep-with-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/paiml/data-prep-with-rust/actions/workflows/ci.yml)
+
 Learn to clean, validate, and transform data for machine learning using
 [Polars](https://pola.rs) — a fast, memory-efficient DataFrame library —
 directed through an AI coding agent in Rust. You'll take a raw, messy
@@ -103,7 +105,26 @@ Each layer has one guarantee (see [`outline.md`](outline.md) lesson 3.1.2):
 
 Every stage prints a `DataQualityReport` (rows in/out, duplicates dropped,
 columns dropped, nulls remaining) so a run can be audited without
-re-reading the data. Build, lint, and test the whole workspace:
+re-reading the data. ### Setup
+
+Install the Rust toolchain used by CI (1.99.1, with `rustfmt` and `clippy`).
+`make` is also required.
+
+**Linux (Ubuntu)**
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+rustup toolchain install 1.99.1 --component rustfmt --component clippy
+```
+
+**macOS**
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+rustup toolchain install stable --component rustfmt --component clippy
+```
+
+Build, lint, and test the whole workspace:
 
 ```bash
 make rust            # fmt --check + clippy -D warnings + cargo test

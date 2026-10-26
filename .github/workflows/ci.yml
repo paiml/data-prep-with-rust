@@ -44,16 +44,37 @@ jobs:
       - name: Pipeline demo (bronze -> silver -> gold)
         run: make pipeline-demo
 
+  coverage:
+    name: coverage (report)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.99.1
+          components: llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: pipeline
+          shared-key: coverage
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-llvm-cov@0.6.21
+      - name: Line coverage (report only, below 100%)
+        working-directory: pipeline
+        run: cargo llvm-cov --workspace --summary-only
+
   gate:
     name: gate
-    needs: [lint, rust]
+    needs: [lint, rust, coverage]
     runs-on: ubuntu-24.04
     if: always()
     steps:
       - name: Verify all jobs succeeded
         run: |
-          if [ "${{ needs.lint.result }}" != "success" ] || [ "${{ needs.rust.result }}" != "success" ]; then
-            echo "::error::lint=${{ needs.lint.result }} rust=${{ needs.rust.result }}"
+          if [ "${{ needs.lint.result }}" != "success" ] || [ "${{ needs.rust.result }}" != "success" ] || [ "${{ needs.coverage.result }}" != "success" ]; then
+            echo "::error::lint=${{ needs.lint.result }} rust=${{ needs.rust.result }} coverage=${{ needs.coverage.result }}"
             exit 1
           fi
           echo "all gates passed"
